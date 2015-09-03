@@ -52,7 +52,7 @@ var buildConfig = function(result, callback) {
         // Enumerate dishes and shove them into an object
         var dishList = siteRoot.dish;
         for (dishId in dishList) {
-                var siteInfo = {site: siteName};
+            var siteInfo = {site: siteName};
             var dishObject = cleanObject(dishList, dishId, siteInfo);
             config.dish = extend(config.dish, dishObject);
         };
@@ -97,7 +97,7 @@ var buildData = function(result, callback) {
         var dSList = dishRoot.downSignal;
         var dSArray = data.dish[dishName].downSignal;
         for (dSId in dSList) {
-                dSArray[dSId] = dSList[dSId].$;
+            dSArray[dSId] = dSList[dSId].$;
         };
         // Enumerate upsignals and shove them into an object
         var uSList = dishRoot.upSignal;
