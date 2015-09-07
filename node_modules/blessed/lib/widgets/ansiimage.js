@@ -8,11 +8,8 @@
  * Modules
  */
 
-var cp = require('child_process')
-  , path = require('path')
-  , fs = require('fs');
+var cp = require('child_process');
 
-var helpers = require('../helpers');
 var colors = require('../colors');
 
 var Node = require('./node');
@@ -49,6 +46,10 @@ function ANSIImage(options) {
     if (!lpos) return;
     // prevent image from blending with itself if there are alpha channels
     self.screen.clearRegion(lpos.xi, lpos.xl, lpos.yi, lpos.yl);
+  });
+
+  this.on('destroy', function() {
+    self.stop();
   });
 }
 
@@ -122,38 +123,37 @@ ANSIImage.prototype.setImage = function(file) {
   }
 };
 
-ANSIImage.prototype.play = function(callback) {
+ANSIImage.prototype.play = function() {
   var self = this;
-  return this.img.play(callback || function(bmp, cellmap) {
+  if (!this.img) return;
+  return this.img.play(function(bmp, cellmap) {
     self.cellmap = cellmap;
     self.screen.render();
   });
 };
 
 ANSIImage.prototype.pause = function() {
+  if (!this.img) return;
   return this.img.pause();
 };
 
 ANSIImage.prototype.stop = function() {
+  if (!this.img) return;
   return this.img.stop();
 };
 
 ANSIImage.prototype.clearImage = function() {
-  if (this.img) {
-    this.stop();
-  }
+  this.stop();
   this.setContent('');
   this.img = null;
   this.cellmap = null;
 };
 
 ANSIImage.prototype.render = function() {
-  var self = this;
-
   var coords = this._render();
   if (!coords) return;
 
-  if (this.img) {
+  if (this.img && this.cellmap) {
     this.img.renderElement(this.cellmap, this);
   }
 
