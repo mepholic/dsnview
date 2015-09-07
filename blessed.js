@@ -4,16 +4,16 @@ var screen = blessed.screen();
 
 var list = blessed.list({
     parent: screen,
-    width: '50%',
-    height: '50%',
+    width: '95%',
+    height: '95%',
     top: 'center',
     left: 'center',
-    align: 'center',
-    fg: 'blue',
+    align: 'left',
+    fg: 'lightgreen',
     border: {
         type: 'line'
     },
-    selectedBg: 'green',
+    selectedBg: 'red',
 
     // Allow mouse support
     mouse: true,
@@ -26,21 +26,14 @@ var list = blessed.list({
 });
 
 list.setItems([
-    'one',
-    'two',
-    'three',
-    'four',
-    'five',
-    'six',
-    'seven',
-    'eight',
-    'nine',
-    'ten'
+    'Canberra',
+    'Goldstone',
+    'Madrid'
 ]);
 
 list.prepend(new blessed.Text({
     left: 2,
-    content: ' My list '
+    content: ' Locations '
 }));
 
 // Allow scrolling with the mousewheel (manually).
@@ -53,7 +46,7 @@ list.prepend(new blessed.Text({
 // });
 
 // Select the first item.
-list.select(0);
+//list.select(0);
 
 screen.key('q', function(ch, key) {
     return process.exit(0);
