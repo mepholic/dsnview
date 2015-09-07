@@ -9,7 +9,8 @@ var fetchLive = require('./lib/fetchLive.js');
 var buildLive = require('./lib/buildLive.js')
 
 // Get our config
-fetchLive.config(function(xml) {
+fetchLive.config()
+.then(function(xml) {
     parseXML(xml, function(err, parsed) {
         buildLive.config(parsed, function(result) {
             inspect(result);
@@ -18,7 +19,8 @@ fetchLive.config(function(xml) {
 });
 
 // Append data to our config
-fetchLive.data(function(xml) {
+fetchLive.data()
+.then(function(xml) {
     parseXML(xml, function(err, parsed) {
         buildLive.data(parsed, function(result) {
             inspect(result);
