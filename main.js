@@ -1,16 +1,6 @@
-// Debugging
-var inspect = require('eyes').inspector({
-    maxLength: false
-});
+var liveData = require('./lib/liveData.js');
 
-var getDSN = require('./getDSN.js');
-
-getDSN.config()
-.then(function(config) {
-  inspect(config);
-});
-
-getDSN.data()
-.then(function(data) {
-  inspect(data);
-});
+liveData()
+.then(function(content) {
+  console.dir(content);
+})
