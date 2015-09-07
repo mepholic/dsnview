@@ -1,3 +1,7 @@
+var inspect = require('eyes').inspector({
+    maxLength: false
+});
+
 var liveData = require('./lib/liveData.js');
 var findData = require('./findData.js');
 
@@ -105,45 +109,47 @@ var targetBox = blessed.list({
   vi: true
 });
 
+// Populate Site List with live data
 liveData()
 .then(function(content) {
-  sites = findData.siteList(content).sort();
-  siteBox.setItems(sites);
+  var sites = findData.siteList(content).sort();
+  sites.map(function(val) {
+    var siteName = content.site[val].friendlyName;
+    siteBox.addItem(siteName).set('siteKey', val);
+  });
   screen.render();
 });
 
-siteBox.on('select', function() {
-  var selected = this.value;
+// Populate Dish List with live data when site is selected
+siteBox.on('select', function(child) {
+  var siteKey = child.get('siteKey');
   liveData()
   .then(function(content) {
-    selected = findData.siteKey(content, selected);
-    var dishes = findData.siteDishes(content, selected).sort();
-    dishBox.setItems(dishes);
+    dishBox.clearItems();
+    var dishes = findData.siteDishes(content, siteKey).sort();
+    dishes.map(function(val) {
+      var dishName = content.dish[val].friendlyName;
+      dishBox.addItem(dishName).set('dishKey', val);
+    });
     dishBox.focus();
     screen.render();
   });
 });
 
-dishBox.on('select', function() {
-  var selected = this.value;
+// Populate Target List with live data when dish is selected
+dishBox.on('select', function(child) {
+  var dishKey = child.get('dishKey');
   liveData()
   .then(function(content) {
-    selected = findData.dishKey(content, selected);
-    var targets = findData.dishTargets(content, selected).sort();
-    targetBox.setItems(targets);
+    targetBox.clearItems();
+    var targets = findData.dishTargets(content, dishKey).sort();
+    targets.map(function(val) {
+      targetBox.addItem(val).set('targetKey', val);
+    });
     targetBox.focus();
     screen.render();
   });
 });
-
-// Allow scrolling with the mousewheel (manually).
-// list.on('wheeldown', function() {
-//   list.down();
-// });
-//
-// list.on('wheelup', function() {
-//   list.up();
-// });
 
 // Select the first item.
 siteBox.select(1);

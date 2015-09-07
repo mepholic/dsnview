@@ -7,44 +7,32 @@ var getKeyByName = function(content, name) {
   }
 };
 
+var getKeys = function(content, check) {
+  var keys = [];
+  for (key in content) {
+    if (typeof check === 'object') {
+      if (content[key][check.item] === check.match) keys.push(key);
+    } else {
+      keys.push(key);
+    }
+  }
+  return keys;
+};
+
 module.exports = {
-  // Return an array of friendly site names
+  // Return a list of site keys
   siteList : function(content) {
-    var sites = [];
-    for (site in content.site) {
-      sites.push(content.site[site].friendlyName);
-    }
-    return sites;
+    return getKeys(content.site);
   },
-  // Return the site key from a friendly site name
-  siteKey : function(content, siteName) {
-    return getKeyByName(content.site, siteName);
-  },
-  // Return an array of friendly dish names belonging to a site
+  // Return a list of dish keys for a site
   siteDishes : function(content, siteKey) {
-    var dishes = [];
-    for (dish in content.dish) {
-      if (content.dish[dish].site === siteKey) {
-        dishes.push(content.dish[dish].friendlyName);
-      }
-    }
+    var check = { item: 'site', match: siteKey };
+    var dishes = getKeys(content.dish, check);
     return dishes;
   },
-  // Return the raw site object based on site key
-  siteInfo : function(content, siteKey) {
-    return content.site[siteKey];
-  },
-  // Return the dish key from a friendly dish name
-  dishKey : function(content, dishName) {
-    return getKeyByName(content.dish, dishName);
-  },
-  //
+  // Return an arrat of friendly target names belonging to a dish
   dishTargets : function(content, dishKey) {
-    var targets = [];
     var source = content.dish[dishKey].target;
-    for (target in source) {
-      targets.push(target);
-    }
-    return targets;
+    return getKeys(source);
   },
 };
