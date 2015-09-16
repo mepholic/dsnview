@@ -17,6 +17,13 @@ var siteBox = blessed.list({
   border: {
     type: 'line'
   },
+  style: {
+    focus: {
+      border: {
+        fg: 'yellow'
+      }
+    }
+  },
   selectedBg: 'blue',
   label: 'Sites',
   content: ' Loading... ',
@@ -55,6 +62,13 @@ var dishBox = blessed.list({
   fg: 'lightgreen',
   border: {
     type: 'line'
+  },
+  style: {
+    focus: {
+      border: {
+        fg: 'yellow'
+      }
+    }
   },
   selectedBg: 'blue',
   label: 'Dishes',
@@ -95,6 +109,13 @@ var targetBox = blessed.list({
   border: {
     type: 'line'
   },
+  style: {
+    focus: {
+      border: {
+        fg: 'yellow'
+      }
+    }
+  },
   selectedBg: 'blue',
   label: 'Targets',
   content: ' Select a Dish ',
@@ -120,6 +141,20 @@ var targetInfo = blessed.text({
   },
   label: 'Target Info',
   content: ' Select a Target '
+});
+
+// initially focus the site box
+siteBox.focus();
+screen.render();
+
+// Allow Tab to go to next window
+screen.key('tab', function() {
+  screen.focusNext();
+});
+
+// Allow Shift-Tab to go back a window
+screen.key('S-tab', function () {
+  screen.focusPrevious();
 });
 
 // Populate Site List with live data

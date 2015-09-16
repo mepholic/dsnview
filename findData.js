@@ -27,8 +27,7 @@ module.exports = {
   // Return a list of dish keys for a site
   siteDishes : function(content, siteKey) {
     var check = { item: 'site', match: siteKey };
-    var dishes = getKeys(content.dish, check);
-    return dishes;
+    return getKeys(content.dish, check);
   },
   // Return an arrat of friendly target names belonging to a dish
   dishTargets : function(content, dishKey) {
