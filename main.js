@@ -189,8 +189,9 @@ siteBox.on('select', function(child) {
     var siteObj = content.site[siteKey];
     // TODO: NASA provides a timezone offset here, use it
     var userTime = new Date(parseInt(siteObj.timeUTC));
-    siteInfo.pushLine('Time:      ' + userTime);
-    siteInfo.pushLine('Latitude:  ' + siteObj.latitude);
+    siteInfo.pushLine('Name     : ' + siteObj.friendlyName);
+    siteInfo.pushLine('Time     : ' + userTime);
+    siteInfo.pushLine('Latitude : ' + siteObj.latitude);
     siteInfo.pushLine('Longitude: ' + siteObj.longitude);
     // draw screen
     screen.render();
@@ -224,6 +225,7 @@ dishBox.on('select', function(child) {
     });
     // add data to dish info
     var dishObj = content.dish[dishKey];
+    dishInfo.pushLine('Name       : ' + dishObj.friendlyName)
     dishInfo.pushLine('Type       : ' + dishObj.type);
     if (active) {
       dishInfo.pushLine('Started    : ' + dishObj.created);
@@ -250,7 +252,8 @@ targetBox.on('select', function(child) {
     });
     // add data to target Info
     var targetObj = content.dish[dishKey].target[targetKey];
-    //console.log(ta);
+    var spacecraft = findData.spacecraftMap(content, targetKey);
+    targetInfo.pushLine('Name         : ' + spacecraft.friendlyName);
     targetInfo.pushLine('Up Distance  : ' + targetObj.uplegRange);
     targetInfo.pushLine('Down Distance: ' + targetObj.downlegRange);
     targetInfo.pushLine('RT Light Time: ' + targetObj.rtlt);

@@ -34,4 +34,7 @@ module.exports = {
     var source = content.dish[dishKey].target;
     return getKeys(source);
   },
+  spacecraftMap : function(content, spacecraftKey) {
+    return content.spacecraft[spacecraftKey.toLowerCase()];
+  },
 };
