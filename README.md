@@ -17,6 +17,11 @@ You will need the following applications and libraries installed to use this:
   * node.extend (npm)
   * blessed (npm)
 
+Ideally, you should be able to simply clone this project, enter it's directory,
+and run the following command:
+
+    $ npm install
+
 ## Usage
 You can run the CLI UI with the following from within the project root:
 
