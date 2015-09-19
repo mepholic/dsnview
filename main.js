@@ -181,9 +181,15 @@ siteBox.on('select', function(child) {
       var dishName = content.dish[val].friendlyName;
       dishBox.addItem(dishName).set('dishKey', val);
     });
-    // wipe away data in site info
+    // wipe away data in site info, dish info, and target info
     siteInfo.getLines().map(function (val, i) {
       siteInfo.deleteLine(i);
+    });
+    dishInfo.getLines().map(function(val, i) {
+      dishInfo.deleteLine(i);
+    });
+    targetInfo.getLines().map(function(val, i) {
+      targetInfo.deleteLine(i);
     });
     // add data to site info
     var siteObj = content.site[siteKey];
@@ -219,9 +225,12 @@ dishBox.on('select', function(child) {
       });
       active = true;
     }
-    // wipe away data in dish info
+    // wipe away data in dish info and target info
     dishInfo.getLines().map(function(val, i) {
       dishInfo.deleteLine(i);
+    });
+    targetInfo.getLines().map(function(val, i) {
+      targetInfo.deleteLine(i);
     });
     // add data to dish info
     var dishObj = content.dish[dishKey];
