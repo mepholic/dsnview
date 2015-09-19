@@ -1,0 +1,35 @@
+{
+  "name": "dsnview",
+  "version": "0.9.0",
+  "description": "A TUI application to view live data from NASA's Deep Space Network Now application (https://eyes.nasa.gov/dsn/dsn.html)",
+  "main": "main.js",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "node.extend": "^1.1.5",
+    "q": "^1.4.1",
+    "xml2js": "^0.4.12"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mepholic/dsnview.git"
+  },
+  "keywords": [
+    "nasa",
+    "dsn",
+    "tui",
+    "deep",
+    "space",
+    "network",
+    "live"
+  ],
+  "author": "mepholic",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/mepholic/dsnview/issues"
+  },
+  "homepage": "https://github.com/mepholic/dsnview#readme"
+}
