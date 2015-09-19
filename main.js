@@ -157,9 +157,14 @@ screen.key('S-tab', function () {
   screen.focusPrevious();
 });
 
-// Populate Site List with live data
+// Fetch Initial data
+var content = {};
 liveData()
-.then(function(content) {
+.then(function(data) {
+  content = data;
+})
+.done(function() {
+  // Populate Site List with live data
   var sites = findData.siteList(content).sort();
   sites.map(function(val) {
     var siteName = content.site[val].friendlyName;
@@ -168,106 +173,108 @@ liveData()
   screen.render();
 });
 
+// Update every 5 seconds
+setInterval(function() {
+  liveData()
+    .then(function(data) {
+      content = data;
+    })
+    .done(function () {
+      screen.render();
+    });
+}, 5000);
+
 // Populate Dish List and Site Info with live data when site is selected
 siteBox.on('select', function(child) {
   var siteKey = child.get('siteKey');
-  liveData()
-  .then(function(content) {
-    // wipe away data in clear items
-    dishBox.clearItems();
-    // add data to dish list
-    var dishes = findData.siteDishes(content, siteKey).sort();
-    dishes.map(function(val) {
-      var dishName = content.dish[val].friendlyName;
-      dishBox.addItem(dishName).set('dishKey', val);
-    });
-    // wipe away data in site info, dish info, and target info
-    siteInfo.getLines().map(function (val, i) {
-      siteInfo.deleteLine(i);
-    });
-    dishInfo.getLines().map(function(val, i) {
-      dishInfo.deleteLine(i);
-    });
-    targetInfo.getLines().map(function(val, i) {
-      targetInfo.deleteLine(i);
-    });
-    // add data to site info
-    var siteObj = content.site[siteKey];
-    // TODO: NASA provides a timezone offset here, use it
-    var userTime = new Date(parseInt(siteObj.timeUTC));
-    siteInfo.pushLine('Name     : ' + siteObj.friendlyName);
-    siteInfo.pushLine('Time     : ' + userTime);
-    siteInfo.pushLine('Latitude : ' + siteObj.latitude);
-    siteInfo.pushLine('Longitude: ' + siteObj.longitude);
-    // draw screen
-    screen.render();
+  // wipe away data in clear items
+  dishBox.clearItems();
+  // add data to dish list
+  var dishes = findData.siteDishes(content, siteKey).sort();
+  dishes.map(function(val) {
+    var dishName = content.dish[val].friendlyName;
+    dishBox.addItem(dishName).set('dishKey', val);
   });
+  // wipe away data in site info, dish info, and target info
+  siteInfo.getLines().map(function (val, i) {
+    siteInfo.deleteLine(i);
+  });
+  dishInfo.getLines().map(function(val, i) {
+    dishInfo.deleteLine(i);
+  });
+  targetInfo.getLines().map(function(val, i) {
+    targetInfo.deleteLine(i);
+  });
+  // add data to site info
+  var siteObj = content.site[siteKey];
+  // TODO: NASA provides a timezone offset here, use it
+  var userTime = new Date(parseInt(siteObj.timeUTC));
+  siteInfo.pushLine('Name     : ' + siteObj.friendlyName);
+  siteInfo.pushLine('Time     : ' + userTime);
+  siteInfo.pushLine('Latitude : ' + siteObj.latitude);
+  siteInfo.pushLine('Longitude: ' + siteObj.longitude);
+  // draw screen
+  screen.render();
 });
 
 // Populate Target List with live data when dish is selected
 dishBox.on('select', function(child) {
   var dishKey = child.get('dishKey');
-  liveData()
-  .then(function(content) {
-    // dish activity
-    var active = false;
-    // wipe away data in target list
-    targetBox.clearItems();
-    // set items in target list
-    var targets = findData.dishTargets(content, dishKey).sort();
-    if (targets.length === 0) {
-      targetBox.addItem('No current targets!');
-    } else {
-      targets.map(function(val) {
-        var line = targetBox.addItem(val);
-        line.set('dishKey', dishKey);
-        line.set('targetKey', val);
-      });
-      active = true;
-    }
-    // wipe away data in dish info and target info
-    dishInfo.getLines().map(function(val, i) {
-      dishInfo.deleteLine(i);
+  // dish activity
+  var active = false;
+  // wipe away data in target list
+  targetBox.clearItems();
+  // set items in target list
+  var targets = findData.dishTargets(content, dishKey).sort();
+  if (targets.length === 0) {
+    targetBox.addItem('No current targets!');
+  } else {
+    targets.map(function(val) {
+      var line = targetBox.addItem(val);
+      line.set('dishKey', dishKey);
+      line.set('targetKey', val);
     });
-    targetInfo.getLines().map(function(val, i) {
-      targetInfo.deleteLine(i);
-    });
-    // add data to dish info
-    var dishObj = content.dish[dishKey];
-    dishInfo.pushLine('Name       : ' + dishObj.friendlyName)
-    dishInfo.pushLine('Type       : ' + dishObj.type);
-    if (active) {
-      dishInfo.pushLine('Started    : ' + dishObj.created);
-      dishInfo.pushLine('Created    : ' + dishObj.updated);
-      dishInfo.pushLine('Azimuth    : ' + dishObj.azimuthAngle);
-      dishInfo.pushLine('Elevation  : ' + dishObj.elevationAngle);
-      dishInfo.pushLine('Wind Speed : ' + dishObj.windSpeed);
-      dishInfo.pushLine('Multi-craft: ' + dishObj.isMSPA);
-      dishInfo.pushLine('Array      : ' + dishObj.isArray);
-      dishInfo.pushLine('Delta Range: ' + dishObj.isDDOR);
-    }
-    screen.render();
+    active = true;
+  }
+  // wipe away data in dish info and target info
+  dishInfo.getLines().map(function(val, i) {
+    dishInfo.deleteLine(i);
   });
+  targetInfo.getLines().map(function(val, i) {
+    targetInfo.deleteLine(i);
+  });
+  // add data to dish info
+  var dishObj = content.dish[dishKey];
+  dishInfo.pushLine('Name       : ' + dishObj.friendlyName)
+  dishInfo.pushLine('Type       : ' + dishObj.type);
+  if (active) {
+    dishInfo.pushLine('Started    : ' + dishObj.created);
+    dishInfo.pushLine('Created    : ' + dishObj.updated);
+    dishInfo.pushLine('Azimuth    : ' + dishObj.azimuthAngle);
+    dishInfo.pushLine('Elevation  : ' + dishObj.elevationAngle);
+    dishInfo.pushLine('Wind Speed : ' + dishObj.windSpeed);
+    dishInfo.pushLine('Multi-craft: ' + dishObj.isMSPA);
+    dishInfo.pushLine('Array      : ' + dishObj.isArray);
+    dishInfo.pushLine('Delta Range: ' + dishObj.isDDOR);
+  }
+  screen.render();
 });
 
 // Populate the Target Info box
 targetBox.on('select', function(child) {
   var dishKey = child.get('dishKey');
   var targetKey = child.get('targetKey');
-  liveData()
-  .then(function(content) {
-    targetInfo.getLines().map(function(val, i) {
-      targetInfo.deleteLine(i);
-    });
-    // add data to target Info
-    var targetObj = content.dish[dishKey].target[targetKey];
-    var spacecraft = findData.spacecraftMap(content, targetKey);
-    targetInfo.pushLine('Name         : ' + spacecraft.friendlyName);
-    targetInfo.pushLine('Up Distance  : ' + targetObj.uplegRange);
-    targetInfo.pushLine('Down Distance: ' + targetObj.downlegRange);
-    targetInfo.pushLine('RT Light Time: ' + targetObj.rtlt);
-    screen.render();
+  targetInfo.getLines().map(function(val, i) {
+    targetInfo.deleteLine(i);
   });
+  // add data to target Info
+  var targetObj = content.dish[dishKey].target[targetKey];
+  var spacecraft = findData.spacecraftMap(content, targetKey);
+  targetInfo.pushLine('Name         : ' + spacecraft.friendlyName);
+  targetInfo.pushLine('Up Distance  : ' + targetObj.uplegRange);
+  targetInfo.pushLine('Down Distance: ' + targetObj.downlegRange);
+  targetInfo.pushLine('RT Light Time: ' + targetObj.rtlt);
+  screen.render();
 });
 
 
