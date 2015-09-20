@@ -1,6 +1,6 @@
 {
   "name": "dsnview",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "A TUI application to view live data from NASA's Deep Space Network Now application (https://eyes.nasa.gov/dsn/dsn.html)",
   "main": "main.js",
   "dependencies": {

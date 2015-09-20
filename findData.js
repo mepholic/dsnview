@@ -1,4 +1,3 @@
-
 var getKeyByName = function(content, name) {
   for (var key in content) {
     if (content[key].friendlyName === name) {
@@ -21,6 +20,18 @@ var getKeys = function(content, check) {
   return keys;
 };
 
+var getSignals = function(source, dishKey, spacecraftKey) {
+  var signals = [];
+  var idx = 0;
+  source.map(function(val) {
+    if (val.spacecraft === spacecraftKey) {
+      signals[idx] = val;
+      idx++;
+    }
+  });
+  return signals;
+};
+
 module.exports = {
   // Return a list of site keys
   siteList: function(content) {
@@ -38,5 +49,13 @@ module.exports = {
   },
   getSpacecraft: function(content, spacecraftKey) {
     return content.spacecraft[spacecraftKey.toLowerCase()];
+  },
+  getDownSignals: function(content, dishKey, spacecraftKey) {
+    var source = content.dish[dishKey].downSignal;
+    return getSignals(source, dishKey, spacecraftKey);
+  },
+  getUpSignals: function(content, dishKey, spacecraftKey) {
+    var source = content.dish[dishKey].upSignal;
+    return getSignals(source, dishKey, spacecraftKey);
   },
 };

@@ -270,6 +270,7 @@ targetBox.on('select', function(child) {
   // Add data to target Info
   var targetObj = content.dish[dishKey].target[targetKey];
   var spacecraft = findData.getSpacecraft(content, targetKey);
+  // Check if there's a spacecraft object, and set friendly name
   if (typeof spacecraft !== 'undefined') {
     targetInfo.pushLine('Name         : ' + spacecraft.friendlyName);
   } else {
@@ -278,6 +279,32 @@ targetBox.on('select', function(child) {
   targetInfo.pushLine('Up Distance  : ' + targetObj.uplegRange);
   targetInfo.pushLine('Down Distance: ' + targetObj.downlegRange);
   targetInfo.pushLine('RT Light Time: ' + targetObj.rtlt);
+  targetInfo.pushLine('');
+  // Get down signals
+  downSignals = findData.getDownSignals(content, dishKey, targetKey);
+  downSignals.map(function(val, i) {
+    i++;
+    targetInfo.pushLine('Downsignal #' + i + ':');
+    targetInfo.pushLine('Signal Type: ' + val.signalType);
+    targetInfo.pushLine('State      : ' + val.signalTypeDebug);
+    targetInfo.pushLine('Power      : ' + val.power);
+    targetInfo.pushLine('Frequency  : ' + val.frequency);
+    targetInfo.pushLine('Data Rate  : ' + val.dataRate);
+  });
+  targetInfo.pushLine('');
+  // Get up signals
+  upSignals = findData.getUpSignals(content, dishKey, targetKey);
+  upSignals.map(function(val, i) {
+    i++;
+    targetInfo.pushLine('Upsignal #' + i + ':');
+    targetInfo.pushLine('Signal Type: ' + val.signalType);
+    targetInfo.pushLine('State      : ' + val.signalTypeDebug);
+    targetInfo.pushLine('Power      : ' + val.power);
+    targetInfo.pushLine('Frequency  : ' + val.frequency);
+    targetInfo.pushLine('Data Rate  : ' + val.dataRate);
+  });
+  targetInfo.pushLine('');
+  // Render Screen
   screen.render();
 });
 
