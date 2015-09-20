@@ -269,8 +269,12 @@ targetBox.on('select', function(child) {
   });
   // Add data to target Info
   var targetObj = content.dish[dishKey].target[targetKey];
-  var spacecraft = findData.spacecraftMap(content, targetKey);
-  targetInfo.pushLine('Name         : ' + spacecraft.friendlyName);
+  var spacecraft = findData.getSpacecraft(content, targetKey);
+  if (typeof spacecraft !== 'undefined') {
+    targetInfo.pushLine('Name         : ' + spacecraft.friendlyName);
+  } else {
+    targetInfo.pushLine('Name         : N/A');
+  }
   targetInfo.pushLine('Up Distance  : ' + targetObj.uplegRange);
   targetInfo.pushLine('Down Distance: ' + targetObj.downlegRange);
   targetInfo.pushLine('RT Light Time: ' + targetObj.rtlt);
