@@ -15,14 +15,14 @@ var siteBox = blessed.list({
   align: 'left',
   fg: 'lightgreen',
   border: {
-    type: 'line'
+    type: 'line',
   },
   style: {
     focus: {
       border: {
-        fg: 'yellow'
-      }
-    }
+        fg: 'yellow',
+      },
+    },
   },
   selectedBg: 'blue',
   label: 'Sites',
@@ -32,10 +32,10 @@ var siteBox = blessed.list({
   // Allow key support (arrow keys + enter)
   keys: true,
   // Use vi built-in keys
-  vi: true
+  vi: true,
 });
 
-// Create Site Box
+// Create Site Info
 var siteInfo = blessed.text({
   parent: screen,
   width: '49%',
@@ -45,10 +45,10 @@ var siteInfo = blessed.text({
   align: 'left',
   fg: 'cyan',
   border: {
-    type: 'line'
+    type: 'line',
   },
   label: 'Site Info',
-  content: ' Select a Site '
+  content: ' Select a Site ',
 });
 
 // Create Dish Box
@@ -61,14 +61,14 @@ var dishBox = blessed.list({
   align: 'left',
   fg: 'lightgreen',
   border: {
-    type: 'line'
+    type: 'line',
   },
   style: {
     focus: {
       border: {
-        fg: 'yellow'
-      }
-    }
+        fg: 'yellow',
+      },
+    },
   },
   selectedBg: 'blue',
   label: 'Dishes',
@@ -78,10 +78,10 @@ var dishBox = blessed.list({
   // Allow key support (arrow keys + enter)
   keys: true,
   // Use vi built-in keys
-  vi: true
+  vi: true,
 });
 
-// Create Site Box
+// Create Dish Info
 var dishInfo = blessed.text({
   parent: screen,
   width: '49%',
@@ -91,10 +91,10 @@ var dishInfo = blessed.text({
   align: 'left',
   fg: 'cyan',
   border: {
-    type: 'line'
+    type: 'line',
   },
   label: 'Dish Info',
-  content: ' Select a Dish '
+  content: ' Select a Dish ',
 });
 
 // Create Target Box
@@ -107,14 +107,14 @@ var targetBox = blessed.list({
   align: 'left',
   fg: 'lightgreen',
   border: {
-    type: 'line'
+    type: 'line',
   },
   style: {
     focus: {
       border: {
-        fg: 'yellow'
-      }
-    }
+        fg: 'yellow',
+      },
+    },
   },
   selectedBg: 'blue',
   label: 'Targets',
@@ -124,10 +124,10 @@ var targetBox = blessed.list({
   // Allow key support (arrow keys + enter)
   keys: true,
   // Use vi built-in keys
-  vi: true
+  vi: true,
 });
 
-// Create Site Box
+// Create Target Info
 var targetInfo = blessed.text({
   parent: screen,
   width: '49%',
@@ -137,13 +137,13 @@ var targetInfo = blessed.text({
   align: 'left',
   fg: 'cyan',
   border: {
-    type: 'line'
+    type: 'line',
   },
   label: 'Target Info',
-  content: ' Select a Target '
+  content: ' Select a Target ',
 });
 
-// initially focus the site box
+// Initially focus the site box
 siteBox.focus();
 screen.render();
 
@@ -153,7 +153,7 @@ screen.key('tab', function() {
 });
 
 // Allow Shift-Tab to go back a window
-screen.key('S-tab', function () {
+screen.key('S-tab', function() {
   screen.focusPrevious();
 });
 
@@ -179,7 +179,7 @@ setInterval(function() {
     .then(function(data) {
       content = data;
     })
-    .done(function () {
+    .done(function() {
       screen.render();
     });
 }, 5000);
@@ -187,16 +187,16 @@ setInterval(function() {
 // Populate Dish List and Site Info with live data when site is selected
 siteBox.on('select', function(child) {
   var siteKey = child.get('siteKey');
-  // wipe away data in clear items
+  // Wipe away data in clear items
   dishBox.clearItems();
-  // add data to dish list
+  // Add data to dish list
   var dishes = findData.siteDishes(content, siteKey).sort();
   dishes.map(function(val) {
     var dishName = content.dish[val].friendlyName;
     dishBox.addItem(dishName).set('dishKey', val);
   });
-  // wipe away data in site info, dish info, and target info
-  siteInfo.getLines().map(function (val, i) {
+  // Wipe away data in site info, dish info, and target info
+  siteInfo.getLines().map(function(val, i) {
     siteInfo.deleteLine(i);
   });
   dishInfo.getLines().map(function(val, i) {
@@ -205,7 +205,7 @@ siteBox.on('select', function(child) {
   targetInfo.getLines().map(function(val, i) {
     targetInfo.deleteLine(i);
   });
-  // add data to site info
+  // Add data to site info
   var siteObj = content.site[siteKey];
   // TODO: NASA provides a timezone offset here, use it
   var userTime = new Date(parseInt(siteObj.timeUTC));
@@ -213,18 +213,18 @@ siteBox.on('select', function(child) {
   siteInfo.pushLine('Time     : ' + userTime);
   siteInfo.pushLine('Latitude : ' + siteObj.latitude);
   siteInfo.pushLine('Longitude: ' + siteObj.longitude);
-  // draw screen
+  // Draw screen
   screen.render();
 });
 
 // Populate Target List with live data when dish is selected
 dishBox.on('select', function(child) {
   var dishKey = child.get('dishKey');
-  // dish activity
+  // Dish activity
   var active = false;
-  // wipe away data in target list
+  // Wipe away data in target list
   targetBox.clearItems();
-  // set items in target list
+  // Set items in target list
   var targets = findData.dishTargets(content, dishKey).sort();
   if (targets.length === 0) {
     targetBox.addItem('No current targets!');
@@ -236,16 +236,16 @@ dishBox.on('select', function(child) {
     });
     active = true;
   }
-  // wipe away data in dish info and target info
+  // Wipe away data in dish info and target info
   dishInfo.getLines().map(function(val, i) {
     dishInfo.deleteLine(i);
   });
   targetInfo.getLines().map(function(val, i) {
     targetInfo.deleteLine(i);
   });
-  // add data to dish info
+  // Add data to dish info
   var dishObj = content.dish[dishKey];
-  dishInfo.pushLine('Name       : ' + dishObj.friendlyName)
+  dishInfo.pushLine('Name       : ' + dishObj.friendlyName);
   dishInfo.pushLine('Type       : ' + dishObj.type);
   if (active) {
     dishInfo.pushLine('Started    : ' + dishObj.created);
@@ -267,7 +267,7 @@ targetBox.on('select', function(child) {
   targetInfo.getLines().map(function(val, i) {
     targetInfo.deleteLine(i);
   });
-  // add data to target Info
+  // Add data to target Info
   var targetObj = content.dish[dishKey].target[targetKey];
   var spacecraft = findData.spacecraftMap(content, targetKey);
   targetInfo.pushLine('Name         : ' + spacecraft.friendlyName);
@@ -282,7 +282,7 @@ targetBox.on('select', function(child) {
 siteBox.select(1);
 
 screen.key('q', function(ch, key) {
-    return process.exit(0);
+  return process.exit(0);
 });
 
 screen.render();

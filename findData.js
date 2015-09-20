@@ -1,6 +1,6 @@
 
 var getKeyByName = function(content, name) {
-  for (key in content) {
+  for (var key in content) {
     if (content[key].friendlyName === name) {
       return key;
     }
@@ -9,9 +9,11 @@ var getKeyByName = function(content, name) {
 
 var getKeys = function(content, check) {
   var keys = [];
-  for (key in content) {
+  for (var key in content) {
     if (typeof check === 'object') {
-      if (content[key][check.item] === check.match) keys.push(key);
+      if (content[key][check.item] === check.match) {
+        keys.push(key);
+      }
     } else {
       keys.push(key);
     }
@@ -21,20 +23,20 @@ var getKeys = function(content, check) {
 
 module.exports = {
   // Return a list of site keys
-  siteList : function(content) {
+  siteList: function(content) {
     return getKeys(content.site);
   },
   // Return a list of dish keys for a site
-  siteDishes : function(content, siteKey) {
+  siteDishes: function(content, siteKey) {
     var check = { item: 'site', match: siteKey };
     return getKeys(content.dish, check);
   },
   // Return an arrat of friendly target names belonging to a dish
-  dishTargets : function(content, dishKey) {
+  dishTargets: function(content, dishKey) {
     var source = content.dish[dishKey].target;
     return getKeys(source);
   },
-  spacecraftMap : function(content, spacecraftKey) {
+  spacecraftMap: function(content, spacecraftKey) {
     return content.spacecraft[spacecraftKey.toLowerCase()];
   },
 };
