@@ -11,11 +11,13 @@ responsibility.
 
 ## Installation
 You will need the following applications and libraries installed to use this:
-  * nodejs
-  * xml2js (npm)
-  * q (npm)
-  * node.extend (npm)
-  * blessed (npm)
+  * [nodejs](https://nodejs.org)
+  * [xml2js (npm)](https://www.npmjs.com/package/xml2js)
+  * [q (npm)](npm install node-q)
+  * [node.extend (npm)](https://www.npmjs.com/package/node.extend)
+  * [blessed (npm)](https://www.npmjs.com/package/bless)
+
+  If the npm installer throws errors, you might have to review [this issue](https://github.com/npm/npm/issues/10434).
 
 Ideally, you should be able to simply clone this project, enter it's directory,
 and run the following command:
